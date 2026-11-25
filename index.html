@@ -112,14 +112,6 @@ button { font: inherit; color: inherit; }
   .hero h1 { font-size: 27vw; white-space: normal; }
   .hero h1 span { display: block; }
 }
-.play {
-  pointer-events: auto; display: inline-flex; align-items: center; gap: 10px;
-  background: var(--fg); color: var(--ink); border: 0; cursor: pointer;
-  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
-  padding: 12px 16px 11px; transition: background .2s;
-}
-.play::before { content: ""; width: 0; height: 0; border-left: 8px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
-.play:hover { background: #fff; }
 .hero .who { color: var(--fg); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; }
 
 /* Kind words: one quote at a time, crossfading on a timer */
@@ -207,6 +199,9 @@ footer .label { color: #6b675f; }
   overflow-wrap: anywhere;
 }
 .big-mail:hover { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+.me-row { display: grid; grid-template-columns: clamp(130px, 24vw, 340px) minmax(0, 1fr); gap: clamp(16px, 3vw, 40px); align-items: end; margin-bottom: clamp(32px, 5vw, 64px); }
+.me { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 1156 / 1343; object-fit: cover; background: #d6d2c8; }
+.me-name { margin: 0 0 6px; font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(2rem, 6.4vw, 6rem); line-height: .85; }
 .foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid rgba(10,10,10,.2); padding-top: 18px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -234,7 +229,6 @@ footer .label { color: #6b675f; }
     <div class="hero-text wrap">
       <div class="row">
         <span class="who">Photo + Video</span>
-        <button class="play" data-clip="reel">Play reel with sound</button>
       </div>
       <h1><span>Social</span> <span>Reel</span></h1>
     </div>
@@ -306,11 +300,18 @@ footer .label { color: #6b675f; }
 </div>
 
 <footer class="wrap">
+  <div class="me-row">
+    <img class="me" src="media/brady-600.jpg" srcset="media/brady-600.jpg 600w, media/brady-1156.jpg 1156w" sizes="(max-width: 560px) 130px, 24vw" alt="Portrait of Brady Huf" loading="lazy" decoding="async" width="1156" height="1343">
+    <div>
+      <p class="me-name">Brady Huf</p>
+      <p class="label">Photo + Video</p>
+    </div>
+  </div>
   <p class="label">Booking + inquiries</p>
   <a class="big-mail" href="mailto:brady@huf.media">brady@huf.media</a>
   <div class="foot">
     <span class="label">© 2026 Brady Huf</span>
-    <span class="label">Photo + Video</span>
+    <span class="label">Social Reel</span>
   </div>
 </footer>
 
