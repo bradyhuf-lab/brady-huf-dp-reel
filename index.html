@@ -139,13 +139,14 @@ header { border-bottom: 1px solid var(--line); }
 .spot .client { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
 
 /* Stills */
-.stills { columns: 3; column-gap: 20px; padding-bottom: 88px; }
-@media (max-width: 860px) { .stills { columns: 2; column-gap: 14px; } }
+/* Photos are dealt into columns left to right, so list order reads across rows. */
+.stills { display: flex; align-items: flex-start; gap: 20px; padding-bottom: 88px; }
+.stills-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+@media (max-width: 860px) { .stills, .stills-col { gap: 14px; } }
 .still {
-  display: block; width: 100%; margin: 0 0 20px; padding: 0; border: 0;
-  background: var(--surface); cursor: zoom-in; break-inside: avoid;
+  display: block; width: 100%; margin: 0; padding: 0; border: 0;
+  background: var(--surface); cursor: zoom-in;
 }
-@media (max-width: 860px) { .still { margin-bottom: 14px; } }
 .still img { display: block; width: 100%; height: auto; transition: opacity .25s; }
 .still:hover img { opacity: .85; }
 
@@ -288,15 +289,15 @@ footer small { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1e
 
   // Stills. Thumbnails in media/photos/thumb, full size in media/photos.
   const PHOTOS = [
-    { file: "fleet-welder.jpg", alt: "Welder at night surrounded by sparks and smoke" },
-    { file: "fleet-03.jpg", alt: "White Silverado with headlights on at dusk on a cleared lot" },
-    { file: "fleet-04.jpg", alt: "Worker in a hard hat on a phone call, leaning on a truck bed" },
     { file: "fleet-05.jpg", alt: "White Silverado parked below quarry walls" },
+    { file: "fleet-09.jpg", alt: "Builder checking a phone at a sawhorse table, Silverado behind" },
+    { file: "fleet-11.jpg", alt: "Close-up of a Silverado grille and headlight" },
+    { file: "fleet-03.jpg", alt: "White Silverado with headlights on at dusk on a cleared lot" },
+    { file: "fleet-welder.jpg", alt: "Welder at night surrounded by sparks and smoke" },
+    { file: "fleet-04.jpg", alt: "Worker in a hard hat on a phone call, leaning on a truck bed" },
     { file: "fleet-06.jpg", alt: "Woman working on a laptop on a tailgate beside a telehandler" },
     { file: "fleet-07.jpg", alt: "Man stepping out of a white pickup on a gravel job site" },
     { file: "fleet-08.jpg", alt: "Blue Silverado HD and white Silverado in a quarry" },
-    { file: "fleet-09.jpg", alt: "Builder checking a phone at a sawhorse table, Silverado behind" },
-    { file: "fleet-11.jpg", alt: "Close-up of a Silverado grille and headlight" },
     { file: "fleet-12.jpg", alt: "Woman on a laptop on a tailgate next to lumber stacks and framing" },
     { file: "fleet-14.jpg", alt: "Builder reviewing plans at a plywood table, Silverado behind" },
     { file: "fleet-16.jpg", alt: "White Silverado parked at a new home construction site" },
@@ -304,14 +305,29 @@ footer small { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1e
   ];
 
   const stills = document.getElementById("stills");
-  PHOTOS.forEach((p, i) => {
+  const tiles = PHOTOS.map((p, i) => {
     const btn = document.createElement("button");
     btn.className = "still";
     btn.setAttribute("aria-label", `View photo ${i + 1}: ${p.alt}`);
     btn.innerHTML = `<img src="media/photos/thumb/${p.file}" alt="${p.alt}" loading="lazy">`;
     btn.addEventListener("click", () => openPhoto(i));
-    stills.appendChild(btn);
+    return btn;
   });
+
+  // Deal tiles across columns so the first photos in the list fill the top row.
+  const narrow = matchMedia("(max-width: 860px)");
+  function layoutStills() {
+    const count = narrow.matches ? 2 : 3;
+    const cols = Array.from({ length: count }, () => {
+      const col = document.createElement("div");
+      col.className = "stills-col";
+      return col;
+    });
+    tiles.forEach((tile, i) => cols[i % count].appendChild(tile));
+    stills.replaceChildren(...cols);
+  }
+  layoutStills();
+  narrow.addEventListener("change", layoutStills);
 
   const lb = document.getElementById("lightbox");
   const lbImg = document.getElementById("lb-img");
