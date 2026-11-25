@@ -80,6 +80,8 @@ button { font: inherit; color: inherit; }
 .hero { position: relative; height: 100svh; min-height: 560px; overflow: hidden; background: var(--ink); }
 .wall { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
 .panel { position: relative; overflow: hidden; border: 0; padding: 0; margin: 0; background: var(--ink-2); cursor: pointer; }
+/* On touch screens the footage is only a backdrop, so swipes scroll the page; the Play button opens the reel. */
+@media (hover: none) { .panel { pointer-events: none; cursor: default; } }
 .panel video, .panel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .4s, transform .8s; }
 .panel .tag {
   position: absolute; top: 76px; left: 14px; z-index: 1;
@@ -481,8 +483,17 @@ footer .label { color: #6b675f; }
     if (opener) opener.focus();
   }
 
+  const touch = matchMedia("(hover: none)");
+  document.querySelectorAll(".panel").forEach((el) => {
+    const sync = () => { el.tabIndex = touch.matches ? -1 : 0; el.toggleAttribute("aria-hidden", touch.matches); };
+    sync();
+    touch.addEventListener("change", sync);
+  });
   document.querySelectorAll("[data-clip]").forEach((el) => {
-    el.addEventListener("click", () => openClip(el.dataset.clip));
+    el.addEventListener("click", () => {
+      if (el.classList.contains("panel") && touch.matches) return;
+      openClip(el.dataset.clip);
+    });
   });
   document.getElementById("vw-close").addEventListener("click", close);
   document.getElementById("vw-prev").addEventListener("click", () => showPhoto(current - 1));
