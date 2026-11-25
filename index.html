@@ -395,7 +395,8 @@ footer .label { color: #6b675f; }
   document.getElementById("q-next").addEventListener("click", () => showQuote(qi + 1));
   qRun();
 
-  // Stills. Thumbnails in media/photos/thumb, full size in media/photos.
+  // Stills, exported from the full-res graded files at 800/1200/1800/3200px wide.
+  const photoSet = (file, widths) => widths.map((w) => `media/photos/${w}/${file} ${w}w`).join(", ");
   const PHOTOS = [
     { file: "fleet-05.jpg", alt: "White Silverado parked below quarry walls" },
     { file: "fleet-09.jpg", alt: "Builder checking a phone at a sawhorse table, Silverado behind" },
@@ -417,7 +418,7 @@ footer .label { color: #6b675f; }
     const btn = document.createElement("button");
     btn.className = "still";
     btn.setAttribute("aria-label", `View photo ${i + 1}: ${p.alt}`);
-    btn.innerHTML = `<img src="media/photos/thumb/${p.file}" alt="${p.alt}" loading="lazy">`;
+    btn.innerHTML = `<img src="media/photos/1200/${p.file}" srcset="${photoSet(p.file, [800, 1200, 1800])}" sizes="(max-width: 860px) 50vw, 33vw" alt="${p.alt}" loading="lazy" decoding="async">`;
     btn.addEventListener("click", () => openPhoto(i));
     return btn;
   });
@@ -455,7 +456,10 @@ footer .label { color: #6b675f; }
   }
   function showPhoto(i) {
     current = (i + PHOTOS.length) % PHOTOS.length;
-    vwImg.src = `media/photos/${PHOTOS[current].file}`;
+    vwImg.removeAttribute("src");
+    vwImg.sizes = "(max-aspect-ratio: 2/3) 100vw, 67vh";
+    vwImg.srcset = photoSet(PHOTOS[current].file, [1800, 3200]);
+    vwImg.src = `media/photos/3200/${PHOTOS[current].file}`;
     vwImg.alt = PHOTOS[current].alt;
     vwCount.textContent = `${String(current + 1).padStart(2, "0")} / ${PHOTOS.length}`;
   }
