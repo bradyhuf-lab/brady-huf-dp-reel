@@ -121,7 +121,7 @@ button { font: inherit; color: inherit; }
 .hero .who { color: var(--fg); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; }
 
 /* Kind words: one quote at a time, crossfading on a timer */
-.words { padding-block: clamp(64px, 10vw, 140px); display: grid; gap: clamp(24px, 3vw, 40px); }
+.words { padding-block: clamp(48px, 7vw, 100px); display: grid; gap: clamp(18px, 2.4vw, 32px); }
 .words-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .q-nav { display: flex; align-items: center; gap: 4px; }
 .q-nav button { background: none; border: 0; cursor: pointer; font-family: var(--mono); font-size: 1rem; padding: 6px 10px; color: var(--fg); }
@@ -132,12 +132,12 @@ button { font: inherit; color: inherit; }
 @keyframes q-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .quotes { display: grid; }
 .quote {
-  grid-area: 1 / 1; margin: 0; display: grid; gap: 24px; align-content: start; min-width: 0;
+  grid-area: 1 / 1; margin: 0; display: grid; gap: 16px; align-content: start; min-width: 0;
   opacity: 0; visibility: hidden; transform: translateY(8px);
   transition: opacity .7s ease, transform .7s ease, visibility 0s linear .7s;
 }
 .quote.on { opacity: 1; visibility: visible; transform: none; transition: opacity .7s ease .15s, transform .7s ease .15s, visibility 0s; }
-.quote blockquote { margin: 0; font-size: clamp(1.6rem, 3.6vw, 3.1rem); line-height: 1.14; font-weight: 400; letter-spacing: -0.02em; text-wrap: pretty; max-width: 30ch; }
+.quote blockquote { margin: 0; font-size: clamp(1.1rem, 2.2vw, 2rem); line-height: 1.28; font-weight: 400; letter-spacing: -0.015em; text-wrap: pretty; max-width: 40ch; }
 .quote figcaption { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .quote figcaption b { color: var(--fg); font-weight: 500; }
 
