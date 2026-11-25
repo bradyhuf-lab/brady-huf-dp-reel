@@ -4,18 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Brady Huf Social Reel</title>
-<meta name="description" content="Brady Huf, photographer and director of photography. Social reel, Mitsubishi video spots, and GM Fleet photo and video.">
+<meta name="description" content="Brady Huf, photo + video. Social reel, Mitsubishi video spots, and GM Fleet photo and video.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Brady Huf Social Reel">
-<meta property="og:description" content="Photographer and director of photography. Social reel, Mitsubishi video spots, and GM Fleet photo and video.">
+<meta property="og:description" content="Photo + video. Social reel, Mitsubishi video spots, and GM Fleet photo and video.">
 <meta property="og:url" content="https://reel.huf.media/">
-<meta property="og:image" content="https://reel.huf.media/og-social.jpg">
+<meta property="og:image" content="https://reel.huf.media/og-reel.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Brady Huf Social Reel">
-<meta name="twitter:image" content="https://reel.huf.media/og-social.jpg">
+<meta name="twitter:image" content="https://reel.huf.media/og-reel.jpg">
 <meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500&display=swap">
@@ -116,12 +120,24 @@ button { font: inherit; color: inherit; }
 .play:hover { background: #fff; }
 .hero .who { color: var(--fg); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; }
 
-/* Kind words */
-.words { padding-block: clamp(64px, 10vw, 140px); display: grid; gap: 40px; }
-.quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px clamp(32px, 5vw, 80px); }
-@media (max-width: 860px) { .quotes { grid-template-columns: 1fr; } }
-.quote { margin: 0; display: grid; gap: 20px; align-content: start; padding-top: 20px; border-top: 1px solid var(--line); min-width: 0; }
-.quote blockquote { margin: 0; font-size: clamp(1.25rem, 2.1vw, 1.75rem); line-height: 1.3; font-weight: 400; letter-spacing: -0.01em; text-wrap: pretty; max-width: 36ch; }
+/* Kind words: one quote at a time, crossfading on a timer */
+.words { padding-block: clamp(64px, 10vw, 140px); display: grid; gap: clamp(24px, 3vw, 40px); }
+.words-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.q-nav { display: flex; align-items: center; gap: 4px; }
+.q-nav button { background: none; border: 0; cursor: pointer; font-family: var(--mono); font-size: 1rem; padding: 6px 10px; color: var(--fg); }
+.q-nav button:hover { color: var(--muted); }
+.q-nav .label { font-variant-numeric: tabular-nums; min-width: 5.5ch; text-align: center; }
+.q-progress { height: 1px; background: var(--line); overflow: hidden; }
+.q-progress i { display: block; height: 100%; background: var(--fg); transform-origin: left; animation: q-fill 8s linear forwards; }
+@keyframes q-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.quotes { display: grid; }
+.quote {
+  grid-area: 1 / 1; margin: 0; display: grid; gap: 24px; align-content: start; min-width: 0;
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .7s ease, transform .7s ease, visibility 0s linear .7s;
+}
+.quote.on { opacity: 1; visibility: visible; transform: none; transition: opacity .7s ease .15s, transform .7s ease .15s, visibility 0s; }
+.quote blockquote { margin: 0; font-size: clamp(1.6rem, 3.6vw, 3.1rem); line-height: 1.14; font-weight: 400; letter-spacing: -0.02em; text-wrap: pretty; max-width: 30ch; }
 .quote figcaption { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .quote figcaption b { color: var(--fg); font-weight: 500; }
 
@@ -215,21 +231,29 @@ footer .label { color: #6b675f; }
     </div>
     <div class="hero-text wrap">
       <div class="row">
-        <span class="who">Photo + Video · Director of Photography</span>
+        <span class="who">Photo + Video</span>
         <button class="play" data-clip="reel">Play reel with sound</button>
       </div>
       <h1><span>Social</span> <span>Reel</span></h1>
     </div>
   </section>
 
-  <section class="words wrap" aria-label="Testimonials">
-    <p class="label">Kind words</p>
-    <div class="quotes">
-      <figure class="quote">
+  <section class="words wrap" aria-roledescription="carousel" aria-label="Kind words">
+    <div class="words-head">
+      <p class="label">Kind words</p>
+      <div class="q-nav">
+        <button id="q-prev" aria-label="Previous quote">←</button>
+        <span class="label" id="q-count">01 / 02</span>
+        <button id="q-next" aria-label="Next quote">→</button>
+      </div>
+    </div>
+    <div class="q-progress"><i id="q-bar"></i></div>
+    <div class="quotes" id="quotes">
+      <figure class="quote on" aria-roledescription="slide">
         <blockquote>Brady was fantastic to work with! Highly self-sufficient and captured far more photo and video content than we planned for which we will be utilizing.</blockquote>
         <figcaption><b>Erik Zaar</b> · Digitas</figcaption>
       </figure>
-      <figure class="quote">
+      <figure class="quote" aria-roledescription="slide">
         <blockquote>Working with Brady on set is a breeze. He anticipates what the motion team is moving to next and stays aware of the full project schedule. He moves quickly while keeping the energy positive, which makes the AD process so much smoother for me.</blockquote>
         <figcaption><b>Autumn Spadaro</b> · Assistant Director</figcaption>
       </figure>
@@ -284,7 +308,7 @@ footer .label { color: #6b675f; }
   <a class="big-mail" href="mailto:brady@huf.media">brady@huf.media</a>
   <div class="foot">
     <span class="label">© 2026 Brady Huf</span>
-    <span class="label">Photo + Video · Director of Photography</span>
+    <span class="label">Photo + Video</span>
   </div>
 </footer>
 
@@ -326,6 +350,50 @@ footer .label { color: #6b675f; }
     }, { threshold: 0.15 });
     loops.forEach((v) => io.observe(v));
   }
+
+  // Kind words carousel: a timer advances the quotes, the bar under the header shows the time left.
+  const QUOTE_MS = 8000;
+  const quotes = [...document.querySelectorAll("#quotes .quote")];
+  const qBar = document.getElementById("q-bar");
+  const qCount = document.getElementById("q-count");
+  const qWrap = document.querySelector(".words");
+  let qi = 0, qTimer = null, qStart = 0, qLeft = QUOTE_MS, qPaused = false;
+  function qRun() {
+    if (calm || qPaused) return;
+    clearTimeout(qTimer);
+    qStart = performance.now();
+    qTimer = setTimeout(() => showQuote(qi + 1), qLeft);
+    qBar.style.animationPlayState = "running";
+  }
+  function qPause(paused) {
+    qPaused = paused;
+    if (calm) return;
+    if (paused) {
+      clearTimeout(qTimer);
+      qLeft -= performance.now() - qStart;
+      qBar.style.animationPlayState = "paused";
+    } else qRun();
+  }
+  function showQuote(i) {
+    qi = (i + quotes.length) % quotes.length;
+    quotes.forEach((q, n) => q.classList.toggle("on", n === qi));
+    qCount.textContent = `${String(qi + 1).padStart(2, "0")} / ${String(quotes.length).padStart(2, "0")}`;
+    qLeft = QUOTE_MS;
+    if (calm) return;
+    qBar.style.animation = "none";
+    void qBar.offsetWidth;
+    qBar.style.animation = "";
+    if (qPaused) qBar.style.animationPlayState = "paused";
+    qRun();
+  }
+  if (calm) qBar.style.animation = "none";
+  qWrap.addEventListener("mouseenter", () => qPause(true));
+  qWrap.addEventListener("mouseleave", () => qPause(false));
+  qWrap.addEventListener("focusin", () => qPause(true));
+  qWrap.addEventListener("focusout", () => qPause(false));
+  document.getElementById("q-prev").addEventListener("click", () => showQuote(qi - 1));
+  document.getElementById("q-next").addEventListener("click", () => showQuote(qi + 1));
+  qRun();
 
   // Stills. Thumbnails in media/photos/thumb, full size in media/photos.
   const PHOTOS = [
