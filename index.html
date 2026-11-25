@@ -15,277 +15,317 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Brady Huf Social Reel">
 <meta name="twitter:image" content="https://reel.huf.media/og-social.jpg">
-<meta name="theme-color" content="#0d0e0f">
+<meta name="theme-color" content="#0a0a0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500&display=swap">
 <style>
-/* Layout: screening room. Main reel full width, four vertical Mitsubishi spots in a row, email at top and bottom. Single dark look by design. */
+/* Layout: a wall of vertical clips fills the first screen, giant type sits on the footage,
+   work follows in full-width bands, and the page ends on an inverted paper footer. Single dark look by design. */
 :root {
-  --bg: #0d0e0f;
-  --surface: #16181a;
-  --line: #2a2d30;
-  --fg: #ece9e3;
-  --muted: #8b8f93;
-  --accent: #d9b26a;        /* tungsten 3200K */
-  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --body: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --ink: #0a0a0a;
+  --ink-2: #151515;
+  --line: rgba(244, 241, 234, .14);
+  --fg: #f4f1ea;
+  --muted: #8d8a83;
+  --paper: #ece8df;
+  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --gutter: clamp(16px, 3vw, 40px);
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--ink);
   color: var(--fg);
   font-family: var(--body);
   font-size: 16px;
-  line-height: 1.55;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-}
-.wrap {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-x: clip;
 }
 a { color: inherit; }
-a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+.wrap {
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+.label {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); margin: 0;
+}
 
-/* Header */
-header { border-bottom: 1px solid var(--line); }
-.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; padding-block: 18px; flex-wrap: wrap; }
-.name {
-  font-family: var(--display);
-  font-stretch: 125%;
-  font-weight: 800;
-  font-size: 1.05rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+/* Header floats over the footage */
+.top {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 5;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 18px); padding-bottom: 18px;
+  color: #fff; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(10,10,10,.55), rgba(10,10,10,0));
 }
-.name span { color: var(--muted); font-weight: 400; font-stretch: 100%; letter-spacing: 0.08em; margin-left: 10px; font-size: 0.78rem; }
-.email {
-  font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.06em;
-  text-decoration: none; color: var(--fg);
-  border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: border-color .2s;
-}
-.email:hover { border-color: var(--accent); }
+.top a, .top span { pointer-events: auto; }
+.brand { font-family: var(--display); font-weight: 900; font-size: 1.45rem; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1; }
+.top .mail { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-decoration: none; }
+.top .mail:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-/* Frames */
-.frame { position: relative; max-width: 100%; background: var(--surface); overflow: hidden; }
-.frame.wide { aspect-ratio: 16 / 9; }
-.frame.tall { aspect-ratio: 9 / 16; }
-.frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
-.ph {
-  position: absolute; inset: 0;
-  background:
-    linear-gradient(var(--line), var(--line)) center / 1px 22px no-repeat,
-    linear-gradient(var(--line), var(--line)) center / 22px 1px no-repeat,
-    radial-gradient(ellipse at center, #1c1f22 0%, var(--surface) 70%);
+/* Hero: wall of vertical loops */
+.hero { position: relative; height: 100svh; min-height: 560px; overflow: hidden; background: var(--ink); }
+.wall { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
+.panel { position: relative; overflow: hidden; border: 0; padding: 0; margin: 0; background: var(--ink-2); cursor: pointer; }
+.panel video, .panel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .4s, transform .8s; }
+.panel .tag {
+  position: absolute; top: 76px; left: 14px; z-index: 1;
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: #fff;
+  opacity: 0; transform: translateY(-4px); transition: opacity .3s, transform .3s;
 }
-.ph::before {
-  content: ""; position: absolute; left: 6%; right: 6%; top: 50%;
-  aspect-ratio: 2.39 / 1; transform: translateY(-50%);
-  border: 1px dashed #3a3e42;
+@media (hover: hover) {
+  .wall:hover .panel video { opacity: .35; }
+  .wall .panel:hover video { opacity: 1; transform: scale(1.03); }
+  .panel:hover .tag { opacity: 1; transform: none; }
 }
-.ph-label {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  padding: 12px 14px;
-  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
-}
-.ph-label b { color: var(--accent); font-weight: 500; }
-.corner { position: absolute; width: 18px; height: 18px; border-color: var(--muted); border-style: solid; opacity: .6; }
-.corner.tl { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
-.corner.tr { top: 12px; right: 12px; border-width: 1px 1px 0 0; }
-.corner.bl { bottom: 40px; left: 12px; border-width: 0 0 1px 1px; }
-.corner.br { bottom: 40px; right: 12px; border-width: 0 1px 1px 0; }
-.rec {
-  position: absolute; top: 14px; left: 40px;
-  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--muted);
-  display: flex; align-items: center; gap: 8px;
-}
-.rec::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #b8433a; }
+@media (max-width: 1100px) { .wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } .panel.edge { display: none; } }
+@media (max-width: 700px)  { .wall { grid-template-columns: 1fr; } .panel:not(.center) { display: none; } }
 
-/* Main reel */
-.hero { padding-block: 48px 72px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); align-items: end; gap: 32px; }
-.hero .frame { width: 100%; }
-@media (max-width: 720px) { .hero { grid-template-columns: 1fr; gap: 24px; } .hero .frame { max-width: 420px; } }
+.hero::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 62%; pointer-events: none;
+  background: linear-gradient(to top, rgba(10,10,10,.92) 0%, rgba(10,10,10,.55) 40%, rgba(10,10,10,0) 100%);
+}
+.hero-text { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; pointer-events: none; padding-bottom: max(20px, env(safe-area-inset-bottom, 0px)); }
+.hero-text .row { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
 .hero h1 {
-  font-family: var(--display);
-  font-stretch: 62%;
-  font-weight: 700;
-  font-size: clamp(3rem, 11vw, 8.5rem);
-  line-height: 0.88;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-  margin: 0;
-  text-wrap: balance;
+  margin: 0; font-family: var(--display); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(5rem, 17.6vw, 21rem); line-height: .78; letter-spacing: -0.01em; color: var(--fg);
+  white-space: nowrap;
 }
-.hero h1 em { font-style: normal; color: var(--accent); }
-.tag { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.hero h1 span { display: inline-block; }
+@media (max-width: 700px) {
+  .hero h1 { font-size: 27vw; white-space: normal; }
+  .hero h1 span { display: block; }
+}
+.play {
+  pointer-events: auto; display: inline-flex; align-items: center; gap: 10px;
+  background: var(--fg); color: var(--ink); border: 0; cursor: pointer;
+  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 12px 16px 11px; transition: background .2s;
+}
+.play::before { content: ""; width: 0; height: 0; border-left: 8px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+.play:hover { background: #fff; }
+.hero .who { color: var(--fg); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; }
 
-/* Mitsubishi spots */
-.head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-top: 1px solid var(--line); padding-block: 20px 28px; flex-wrap: wrap; }
-.head h2 {
-  margin: 0; font-family: var(--display); font-stretch: 125%; font-weight: 700;
-  font-size: 0.95rem; letter-spacing: 0.1em; text-transform: uppercase;
-}
-.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; padding-bottom: 88px; }
-@media (max-width: 860px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; } }
-.spot { display: grid; gap: 12px; min-width: 0; margin: 0; }
-.spot figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.spot h3 { margin: 0; font-size: 1.05rem; font-weight: 600; }
-.spot .client { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
-
-/* Stills */
-/* Photos are dealt into columns left to right, so list order reads across rows. */
-.stills { display: flex; align-items: flex-start; gap: 20px; padding-bottom: 88px; }
-.stills-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
-@media (max-width: 860px) { .stills, .stills-col { gap: 14px; } }
-.still {
-  display: block; width: 100%; margin: 0; padding: 0; border: 0;
-  background: var(--surface); cursor: zoom-in;
-}
-.still img { display: block; width: 100%; height: auto; transition: opacity .25s; }
-.still:hover img { opacity: .85; }
-
-.lightbox {
-  position: fixed; inset: 0; z-index: 10; display: none;
-  align-items: center; justify-content: center;
-  background: rgba(8, 9, 10, .96); padding: 56px 16px;
-}
-.lightbox.open { display: flex; }
-.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.lb-btn {
-  position: absolute; background: rgba(8, 9, 10, .7); border: 0; color: var(--fg); cursor: pointer;
-  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px;
-}
-.lb-btn:hover { color: var(--accent); }
-.lb-close { top: 6px; right: 6px; }
-.lb-prev { left: 6px; top: 50%; transform: translateY(-50%); }
-.lb-next { right: 6px; top: 50%; transform: translateY(-50%); }
-.lb-count { position: absolute; top: 20px; left: 20px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--muted); }
-@media (max-width: 720px) { .lb-prev, .lb-next { top: auto; bottom: 6px; transform: none; } }
-
-/* Testimonial */
-.quote { border-top: 1px solid var(--line); padding-block: 56px 72px; margin: 0; }
-.quote blockquote {
-  margin: 0; max-width: 30ch;
-  font-family: var(--display); font-stretch: 75%; font-weight: 600;
-  font-size: clamp(1.6rem, 4.2vw, 2.9rem); line-height: 1.12; text-wrap: balance;
-}
-.quote blockquote::before { content: "\201C"; color: var(--accent); }
-.quote blockquote::after { content: "\201D"; color: var(--accent); }
-.quote figcaption { margin-top: 24px; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+/* Kind words */
+.words { padding-block: clamp(64px, 10vw, 140px); display: grid; gap: 40px; }
+.quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px clamp(32px, 5vw, 80px); }
+@media (max-width: 860px) { .quotes { grid-template-columns: 1fr; } }
+.quote { margin: 0; display: grid; gap: 20px; align-content: start; padding-top: 20px; border-top: 1px solid var(--line); min-width: 0; }
+.quote blockquote { margin: 0; font-size: clamp(1.25rem, 2.1vw, 1.75rem); line-height: 1.3; font-weight: 400; letter-spacing: -0.01em; text-wrap: pretty; max-width: 36ch; }
+.quote figcaption { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .quote figcaption b { color: var(--fg); font-weight: 500; }
 
-footer { border-top: 1px solid var(--line); }
-footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px 16px; flex-wrap: wrap; padding-block: 24px; }
-footer small { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+/* Section titles: outlined, full width */
+.band { padding-bottom: clamp(72px, 10vw, 140px); }
+.band-head { display: grid; gap: 4px; margin-bottom: clamp(20px, 3vw, 36px); }
+.band-head h2 {
+  margin: 0; font-family: var(--display); font-weight: 800; text-transform: uppercase;
+  font-size: clamp(4rem, 15vw, 17rem); line-height: .8; letter-spacing: -0.005em;
+  color: transparent; -webkit-text-stroke: 1.5px var(--fg);
+}
+.band-head .meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+/* Mitsubishi spots */
+.spots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; }
+@media (max-width: 860px) { .spots { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.spot { margin: 0; min-width: 0; display: grid; gap: 12px; }
+.spot button { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; max-width: 100%; padding: 0; border: 0; background: var(--ink-2); cursor: pointer; overflow: hidden; }
+.spot video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .8s; }
+.spot button::after {
+  content: "Play with sound"; position: absolute; left: 12px; bottom: 12px;
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+  background: var(--fg); color: var(--ink); padding: 7px 10px 6px; opacity: 0; transition: opacity .25s;
+}
+@media (hover: hover) { .spot button:hover video { transform: scale(1.04); } .spot button:hover::after { opacity: 1; } }
+@media (hover: none) { .spot button::after { content: "▶ Sound"; opacity: 1; } }
+.spot figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding-inline: 2px; flex-wrap: wrap; }
+.spot h3 { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(1.4rem, 2.4vw, 2rem); text-transform: uppercase; line-height: 1; }
+
+/* GM Fleet stills. Photos are dealt into columns left to right, so list order reads across rows. */
+.stills { display: flex; align-items: flex-start; gap: 2px; }
+.stills-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.still { display: block; width: 100%; margin: 0; padding: 0; border: 0; background: var(--ink-2); cursor: zoom-in; overflow: hidden; }
+.still img { display: block; width: 100%; height: auto; transition: transform .8s, opacity .3s; }
+@media (hover: hover) { .still:hover img { transform: scale(1.03); } }
+
+/* Viewer for photos and videos */
+.viewer {
+  position: fixed; inset: 0; z-index: 10; display: none;
+  align-items: center; justify-content: center;
+  background: rgba(6, 6, 6, .97); padding: 64px 16px;
+}
+.viewer.open { display: flex; }
+.viewer img, .viewer video { max-width: 100%; max-height: 100%; object-fit: contain; background: #000; }
+.viewer[data-mode="photo"] video, .viewer[data-mode="video"] img,
+.viewer[data-mode="video"] .vw-prev, .viewer[data-mode="video"] .vw-next, .viewer[data-mode="video"] .vw-count { display: none; }
+.vw-btn {
+  position: absolute; background: transparent; border: 0; color: var(--fg); cursor: pointer;
+  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 16px;
+}
+.vw-btn:hover { text-decoration: underline; text-underline-offset: 4px; }
+.vw-close { top: calc(env(safe-area-inset-top, 0px) + 8px); right: max(8px, env(safe-area-inset-right, 0px)); }
+.vw-prev { left: max(8px, env(safe-area-inset-left, 0px)); top: 50%; transform: translateY(-50%); }
+.vw-next { right: max(8px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); }
+.vw-count { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 24px); left: max(24px, env(safe-area-inset-left, 0px)); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; color: var(--muted); }
+@media (max-width: 720px) { .vw-prev, .vw-next { top: auto; bottom: max(8px, env(safe-area-inset-bottom, 0px)); transform: none; } }
+
+/* Footer: inverted paper */
+footer { background: var(--paper); color: var(--ink); padding-block: clamp(48px, 7vw, 96px) max(24px, env(safe-area-inset-bottom, 0px)); }
+footer .label { color: #6b675f; }
+.big-mail {
+  display: block; margin: 12px 0 clamp(40px, 6vw, 72px); text-decoration: none;
+  font-family: var(--display); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(2.6rem, 12.4vw, 15rem); line-height: .82; letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+.big-mail:hover { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+.foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; border-top: 1px solid rgba(10,10,10,.2); padding-top: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .panel video, .spot video, .still img { transition: none; }
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap bar">
-    <div class="name">Brady Huf<span>Photo + Video</span></div>
-    <a class="email" href="mailto:brady@huf.media">brady@huf.media</a>
-  </div>
+<header class="top wrap">
+  <span class="brand">Brady Huf</span>
+  <a class="mail" href="mailto:brady@huf.media">brady@huf.media</a>
 </header>
 
 <main>
-  <section class="wrap hero">
-    <h1>Brady Huf<br><em>Social Reel</em></h1>
-    <div class="frame tall" data-slot="reel" data-label="Main Reel"></div>
-  </section>
-
-  <section class="wrap">
-    <figure class="quote">
-      <blockquote>Brady was fantastic to work with! Highly self-sufficient and captured far more photo and video content than we planned for which we will be utilizing.</blockquote>
-      <figcaption><b>Erik Zaar</b> · Digitas</figcaption>
-    </figure>
-  </section>
-
-  <section class="wrap">
-    <div class="head">
-      <h2>Mitsubishi</h2>
-      <p class="tag">Video · 4 spots · 9:16</p>
+  <section class="hero" aria-label="Social reel">
+    <div class="wall" id="wall">
+      <button class="panel edge" data-clip="farmers"><span class="tag">Farmers Market</span></button>
+      <button class="panel" data-clip="fishing"><span class="tag">Fishing</span></button>
+      <button class="panel center" data-clip="reel"><span class="tag">Social Reel</span></button>
+      <button class="panel" data-clip="picnic"><span class="tag">Picnic</span></button>
+      <button class="panel edge" data-clip="prom"><span class="tag">Prom</span></button>
     </div>
-    <div class="grid">
-      <figure class="spot">
-        <div class="frame tall" data-slot="farmers"></div>
-        <figcaption><h3>Farmers Market</h3><span class="client">Mitsubishi</span></figcaption>
+    <div class="hero-text wrap">
+      <div class="row">
+        <span class="who">Photo + Video · Director of Photography</span>
+        <button class="play" data-clip="reel">Play reel with sound</button>
+      </div>
+      <h1><span>Social</span> <span>Reel</span></h1>
+    </div>
+  </section>
+
+  <section class="words wrap" aria-label="Testimonials">
+    <p class="label">Kind words</p>
+    <div class="quotes">
+      <figure class="quote">
+        <blockquote>Brady was fantastic to work with! Highly self-sufficient and captured far more photo and video content than we planned for which we will be utilizing.</blockquote>
+        <figcaption><b>Erik Zaar</b> · Digitas</figcaption>
       </figure>
-      <figure class="spot">
-        <div class="frame tall" data-slot="fishing"></div>
-        <figcaption><h3>Fishing</h3><span class="client">Mitsubishi</span></figcaption>
-      </figure>
-      <figure class="spot">
-        <div class="frame tall" data-slot="picnic"></div>
-        <figcaption><h3>Picnic</h3><span class="client">Mitsubishi</span></figcaption>
-      </figure>
-      <figure class="spot">
-        <div class="frame tall" data-slot="prom"></div>
-        <figcaption><h3>Prom</h3><span class="client">Mitsubishi</span></figcaption>
+      <figure class="quote">
+        <blockquote>Working with Brady on set is a breeze. He anticipates what the motion team is moving to next and stays aware of the full project schedule. He moves quickly while keeping the energy positive, which makes the AD process so much smoother for me.</blockquote>
+        <figcaption><b>Autumn Spadaro</b> · Assistant Director</figcaption>
       </figure>
     </div>
   </section>
 
-  <section class="wrap">
-    <div class="head">
-      <h2>GM Fleet</h2>
-      <p class="tag">Photo + Video</p>
+  <section class="band" aria-labelledby="mitsu">
+    <div class="band-head wrap">
+      <h2 id="mitsu">Mitsubishi</h2>
+      <div class="meta"><span class="label">Video · 4 spots</span><span class="label">9:16</span></div>
     </div>
-    <div class="stills" id="stills"></div>
+    <div class="spots wrap">
+      <figure class="spot">
+        <button data-clip="farmers" aria-label="Play Farmers Market with sound"></button>
+        <figcaption><h3>Farmers Market</h3><span class="label">0:14</span></figcaption>
+      </figure>
+      <figure class="spot">
+        <button data-clip="fishing" aria-label="Play Fishing with sound"></button>
+        <figcaption><h3>Fishing</h3><span class="label">0:15</span></figcaption>
+      </figure>
+      <figure class="spot">
+        <button data-clip="picnic" aria-label="Play Picnic with sound"></button>
+        <figcaption><h3>Picnic</h3><span class="label">0:17</span></figcaption>
+      </figure>
+      <figure class="spot">
+        <button data-clip="prom" aria-label="Play Prom with sound"></button>
+        <figcaption><h3>Prom</h3><span class="label">0:17</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="gm">
+    <div class="band-head wrap">
+      <h2 id="gm">GM Fleet</h2>
+      <div class="meta"><span class="label">Photo + Video</span><span class="label">Stills</span></div>
+    </div>
+    <div class="stills wrap" id="stills"></div>
   </section>
 </main>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
-  <span class="lb-count" id="lb-count"></span>
-  <button class="lb-btn lb-close" id="lb-close" aria-label="Close">Close ✕</button>
-  <button class="lb-btn lb-prev" id="lb-prev" aria-label="Previous photo">← Prev</button>
-  <img id="lb-img" alt="">
-  <button class="lb-btn lb-next" id="lb-next" aria-label="Next photo">Next →</button>
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Viewer" data-mode="photo">
+  <span class="vw-count" id="vw-count"></span>
+  <button class="vw-btn vw-close" id="vw-close" aria-label="Close">Close ✕</button>
+  <button class="vw-btn vw-prev" id="vw-prev" aria-label="Previous photo">← Prev</button>
+  <img id="vw-img" alt="">
+  <video id="vw-video" controls playsinline></video>
+  <button class="vw-btn vw-next" id="vw-next" aria-label="Next photo">Next →</button>
 </div>
 
-<footer>
-  <div class="wrap">
-    <a class="email" href="mailto:brady@huf.media">brady@huf.media</a>
-    <small>© 2026 Brady Huf</small>
+<footer class="wrap">
+  <p class="label">Booking + inquiries</p>
+  <a class="big-mail" href="mailto:brady@huf.media">brady@huf.media</a>
+  <div class="foot">
+    <span class="label">© 2026 Brady Huf</span>
+    <span class="label">Photo + Video · Director of Photography</span>
   </div>
 </footer>
 
 <script>
-  // Video file for each slot. Leave src empty to show the placeholder.
-  const VIDEOS = {
-    reel:    { src: "media/reel.mp4",           poster: "media/reel.jpg" },
-    farmers: { src: "media/farmers-market.mp4", poster: "media/farmers-market.jpg" },
-    fishing: { src: "media/fishing.mp4",        poster: "media/fishing.jpg" },
-    picnic:  { src: "media/picnic.mp4",         poster: "media/picnic.jpg" },
-    prom:    { src: "media/prom.mp4",           poster: "media/prom.jpg" },
+  // Each clip has a short muted loop for autoplay and the full export for playback with sound.
+  const CLIPS = {
+    reel:    { loop: "media/loop-reel.mp4",           full: "media/reel.mp4",           poster: "media/reel.jpg" },
+    farmers: { loop: "media/loop-farmers-market.mp4", full: "media/farmers-market.mp4", poster: "media/farmers-market.jpg" },
+    fishing: { loop: "media/loop-fishing.mp4",        full: "media/fishing.mp4",        poster: "media/fishing.jpg" },
+    picnic:  { loop: "media/loop-picnic.mp4",         full: "media/picnic.mp4",         poster: "media/picnic.jpg" },
+    prom:    { loop: "media/loop-prom.mp4",           full: "media/prom.mp4",           poster: "media/prom.jpg" },
   };
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  document.querySelectorAll(".frame[data-slot]").forEach((el) => {
-    const v = VIDEOS[el.dataset.slot] || {};
-    if (v.src) {
-      const video = document.createElement("video");
-      video.src = v.src;
-      if (v.poster) video.poster = v.poster;
-      video.controls = true;
-      video.playsInline = true;
-      video.preload = "none";
-      el.appendChild(video);
-      return;
-    }
-    el.innerHTML = `
-      <div class="ph" role="img" aria-label="${el.dataset.label} video placeholder">
-        <span class="corner tl"></span><span class="corner tr"></span>
-        <span class="corner bl"></span><span class="corner br"></span>
-        <span class="rec">STBY</span>
-        <div class="ph-label"><span><b>${el.dataset.label}</b> · Video coming soon</span><span>TC 00:00:00:00</span></div>
-      </div>`;
+  function loopVideo(clip) {
+    const v = document.createElement("video");
+    v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = !calm;
+    v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
+    v.preload = "metadata";
+    v.poster = clip.poster;
+    v.src = clip.loop;
+    v.setAttribute("aria-hidden", "true");
+    return v;
+  }
+
+  // Fill the hero panels and the spot cards with loops.
+  document.querySelectorAll(".panel[data-clip], .spot button[data-clip]").forEach((el) => {
+    el.prepend(loopVideo(CLIPS[el.dataset.clip]));
   });
+
+  // Play loops only while they're on screen and their panel is showing.
+  const loops = document.querySelectorAll(".panel video, .spot video");
+  if (!calm && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (isIntersecting && target.offsetParent !== null) target.play().catch(() => {});
+        else target.pause();
+      });
+    }, { threshold: 0.15 });
+    loops.forEach((v) => io.observe(v));
+  }
 
   // Stills. Thumbnails in media/photos/thumb, full size in media/photos.
   const PHOTOS = [
@@ -329,45 +369,60 @@ footer small { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1e
   layoutStills();
   narrow.addEventListener("change", layoutStills);
 
-  const lb = document.getElementById("lightbox");
-  const lbImg = document.getElementById("lb-img");
-  const lbCount = document.getElementById("lb-count");
+  // Viewer: photos with prev/next, or one video with sound.
+  const viewer = document.getElementById("viewer");
+  const vwImg = document.getElementById("vw-img");
+  const vwVideo = document.getElementById("vw-video");
+  const vwCount = document.getElementById("vw-count");
   let current = 0;
   let opener = null;
 
+  function open(mode) {
+    opener = document.activeElement;
+    viewer.dataset.mode = mode;
+    viewer.classList.add("open");
+    document.body.style.overflow = "hidden";
+    loops.forEach((v) => v.pause());
+    document.getElementById("vw-close").focus();
+  }
   function showPhoto(i) {
     current = (i + PHOTOS.length) % PHOTOS.length;
-    lbImg.src = `media/photos/${PHOTOS[current].file}`;
-    lbImg.alt = PHOTOS[current].alt;
-    lbCount.textContent = `${String(current + 1).padStart(2, "0")} / ${PHOTOS.length}`;
+    vwImg.src = `media/photos/${PHOTOS[current].file}`;
+    vwImg.alt = PHOTOS[current].alt;
+    vwCount.textContent = `${String(current + 1).padStart(2, "0")} / ${PHOTOS.length}`;
   }
-  function openPhoto(i) {
-    opener = document.activeElement;
-    showPhoto(i);
-    lb.classList.add("open");
-    document.body.style.overflow = "hidden";
-    document.getElementById("lb-close").focus();
+  function openPhoto(i) { showPhoto(i); open("photo"); }
+  function openClip(key) {
+    const clip = CLIPS[key];
+    vwVideo.poster = clip.poster;
+    vwVideo.src = clip.full;
+    open("video");
+    vwVideo.play().catch(() => {});
   }
-  function closePhoto() {
-    lb.classList.remove("open");
+  function close() {
+    viewer.classList.remove("open");
+    vwVideo.pause();
+    vwVideo.removeAttribute("src");
+    vwVideo.load();
     document.body.style.overflow = "";
+    if (!calm) loops.forEach((v) => { if (v.offsetParent !== null) v.play().catch(() => {}); });
     if (opener) opener.focus();
   }
-  document.getElementById("lb-close").addEventListener("click", closePhoto);
-  document.getElementById("lb-prev").addEventListener("click", () => showPhoto(current - 1));
-  document.getElementById("lb-next").addEventListener("click", () => showPhoto(current + 1));
-  lb.addEventListener("click", (e) => { if (e.target === lb) closePhoto(); });
+
+  document.querySelectorAll("[data-clip]").forEach((el) => {
+    el.addEventListener("click", () => openClip(el.dataset.clip));
+  });
+  document.getElementById("vw-close").addEventListener("click", close);
+  document.getElementById("vw-prev").addEventListener("click", () => showPhoto(current - 1));
+  document.getElementById("vw-next").addEventListener("click", () => showPhoto(current + 1));
+  viewer.addEventListener("click", (e) => { if (e.target === viewer) close(); });
   document.addEventListener("keydown", (e) => {
-    if (!lb.classList.contains("open")) return;
-    if (e.key === "Escape") closePhoto();
+    if (!viewer.classList.contains("open")) return;
+    if (e.key === "Escape") close();
+    if (viewer.dataset.mode !== "photo") return;
     if (e.key === "ArrowLeft") showPhoto(current - 1);
     if (e.key === "ArrowRight") showPhoto(current + 1);
   });
-
-  // Only one video plays at a time.
-  document.addEventListener("play", (e) => {
-    document.querySelectorAll("video").forEach((v) => { if (v !== e.target) v.pause(); });
-  }, true);
 </script>
 </body>
 </html>
